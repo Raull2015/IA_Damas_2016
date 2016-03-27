@@ -15,12 +15,15 @@ alto = 700
 
 def cambiar_turno(turno):
 	if turno == Ficha.BLANCA:
+		print "Turno: Fichas Cafes"
 		return Ficha.CAFE
 	else:
+		print "Turno: Fichas Blancas"
 		return Ficha.BLANCA
 
 def damas():
 	#asigna variables
+	print "Turno: Fichas Blancas"
 	turno = Ficha.BLANCA
 	seleccionado = False
 	fichaSel = None
@@ -58,7 +61,7 @@ def damas():
 					for j in i:
 						if j != 0:
 							if j.get_rect().collidepoint(posX, posY):
-								print j.get_jugador()
+								print "Ficha de tipo: ", j.get_jugador()
 								#Si selecciona una ficha del color que es el turno
 								if (j.get_color() == turno) & (bloqueo == False):
 									#si la ficha ya estaba seleccionada se deselecciona
