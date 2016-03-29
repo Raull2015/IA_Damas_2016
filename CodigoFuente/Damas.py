@@ -33,6 +33,16 @@ def marcador(ventana,cafes,blancas):
 	ventana.blit(marcadorBlancas,(945,605))
 	ventana.blit(marcadorCafes,(945,655))
 
+def victoria(ventana, cafes,blancas):
+	
+	if cafes == 0:
+		victoriaBlanca = pygame.image.load("../Resources/vBlanca.png")
+		ventana.blit(victoriaBlanca,(71,304))
+	elif blancas == 0:
+		victoriaCafe = pygame.image.load("../Resources/vCafe.png")
+		ventana.blit(victoriaCafe,(71,304))
+
+
 
 def damas():
 	#asigna variables
@@ -62,6 +72,7 @@ def damas():
 	fichaTurno = Ficha(2,880,440)
 	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 	marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
+	victoria(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
 
 	while True:
 		#recoge los evenetos del juego
@@ -117,6 +128,7 @@ def damas():
 												bloqueo = True
 												ventana.blit(imagenFondoBot,(750,0))
 												marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
+												victoria(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
 											#Si la ficha ya no puede moverse mas
 											else:
 												fichaSel = None
@@ -124,6 +136,7 @@ def damas():
 												ventana.blit(imagenFondoBot,(750,0))
 												turno = cambiar_turno(turno,fichaTurno,ventana)
 												marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
+												victoria(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
 												tablero.convertir_dama()
 												tablero.dibujar_fichas(ventana)
 												bloqueo = False
