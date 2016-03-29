@@ -1,6 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 from Tablero import *
+from Ficha import *
 #variables globales
 #Turno
 turno = Ficha.BLANCA
@@ -13,13 +14,25 @@ bloqueo = False
 ancho = 1080
 alto = 700
 
-def cambiar_turno(turno):
+def cambiar_turno(turno,fichaTurno,ventana):
 	if turno == Ficha.BLANCA:
+		fichaTurno.cambiar_imagen(0)
+		ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 		print "Turno: Fichas Cafes"
 		return Ficha.CAFE
 	else:
+		fichaTurno.cambiar_imagen(2)
+		ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 		print "Turno: Fichas Blancas"
 		return Ficha.BLANCA
+
+def marcador(ventana,cafes,blancas):
+	fuente = pygame.font.Font(None, 40)
+	marcadorCafes = fuente.render(str(cafes), 1, (255, 255, 255))
+	marcadorBlancas = fuente.render(str(blancas), 1, (255, 255, 255))
+	ventana.blit(marcadorBlancas,(945,605))
+	ventana.blit(marcadorCafes,(945,655))
+
 
 def damas():
 	#asigna variables
@@ -29,8 +42,8 @@ def damas():
 	fichaSel = None
 	bloqueo = False
 	#Coloca el icono del juego
-	## icon = pygame.image.load("../Resources/Icono.png")
-	## pygame.display.set_icon(icon)
+	icon = pygame.image.load("../Resources/Icono.png")
+	pygame.display.set_icon(icon)
 	#crea la ventana de juego
 	pygame.init()
 	ventana = pygame.display.set_mode((ancho,alto))
@@ -42,6 +55,13 @@ def damas():
 	tablero = Tablero()
 	tablero.dibujar(ventana)
 	tablero.dibujar_fichas(ventana)
+	#Lineas
+	imagenFondoBot = pygame.image.load("../Resources/FondoBotones.png")
+	ventana.blit(imagenFondoBot,(750,0))
+	#Interfaz
+	fichaTurno = Ficha(2,880,440)
+	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
+	marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
 
 	while True:
 		#recoge los evenetos del juego
@@ -95,11 +115,15 @@ def damas():
 												pygame.draw.circle(ventana, (255,117,020), fichaSel.get_rect().center, 39)
 												tablero.dibujar_fichas(ventana)
 												bloqueo = True
+												ventana.blit(imagenFondoBot,(750,0))
+												marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
 											#Si la ficha ya no puede moverse mas
 											else:
 												fichaSel = None
 												seleccionado = False
-												turno = cambiar_turno(turno)
+												ventana.blit(imagenFondoBot,(750,0))
+												turno = cambiar_turno(turno,fichaTurno,ventana)
+												marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
 												tablero.convertir_dama()
 												tablero.dibujar_fichas(ventana)
 												bloqueo = False

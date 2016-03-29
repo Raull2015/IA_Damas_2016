@@ -754,3 +754,27 @@ class Tablero(pygame.sprite.Sprite):
 			if self.cuadricula[7][j].get_jugador() == self.fC:
 				self.cuadricula[7][j].cambiar_imagen(self.fCD)
 				print "ficha en posicion 7,", j ," se convirtio en dama"
+
+	def contador_fichas_blancas(self):
+		i = 0
+		j = 0
+		cont = 0
+		for i in range(8):
+			for j in range(8):
+				if self.cuadricula[i][j] != 0:
+					if self.cuadricula[i][j].get_color() == Ficha.BLANCA:
+						cont += 1
+
+		return cont
+
+	def contador_fichas_cafes(self):
+		i = 0
+		j = 0
+		cont = 0
+		for i in range(8):
+			for j in range(8):
+				if self.cuadricula[i][j] != 0:
+					if self.cuadricula[i][j].get_color() == Ficha.CAFE:
+						cont += 1
+
+		return cont
