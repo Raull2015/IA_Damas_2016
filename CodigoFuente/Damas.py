@@ -29,15 +29,18 @@ def cambiar_turno(turno,fichaTurno,ventana):
 		print "Turno: Fichas Blancas"
 		return Ficha.BLANCA
 
-def marcador(ventana,cafes,blancas):
+def marcador(ventana,tablero):
+	cafes = tablero.contador_fichas_cafes()
+	blancas = tablero.contador_fichas_blancas()
 	fuente = pygame.font.Font(None, 40)
 	marcadorCafes = fuente.render(str(cafes), 1, (255, 255, 255))
 	marcadorBlancas = fuente.render(str(blancas), 1, (255, 255, 255))
 	ventana.blit(marcadorBlancas,(945,605))
 	ventana.blit(marcadorCafes,(945,655))
 
-def victoria(ventana, cafes,blancas):
-	
+def victoria(ventana, tablero):
+	cafes = tablero.contador_fichas_cafes()
+	blancas = tablero.contador_fichas_blancas()
 	if cafes == 0:
 		victoriaBlanca = pygame.image.load("../Resources/vBlanca.png")
 		ventana.blit(victoriaBlanca,(71,304))
@@ -45,7 +48,10 @@ def victoria(ventana, cafes,blancas):
 		victoriaCafe = pygame.image.load("../Resources/vCafe.png")
 		ventana.blit(victoriaCafe,(71,304))
 
-
+def seleccionar_ficha(ventana, tablero, fichaSel):
+	tablero.dibujar(ventana)
+	pygame.draw.circle(ventana, (255,117,020), fichaSel.get_rect().center, 39)
+	tablero.dibujar_fichas(ventana)
 
 def damas():
 	#botonReiniciar = Boton(850,200)
@@ -74,9 +80,15 @@ def damas():
 	imagenFondoBot = pygame.image.load("../Resources/FondoBotones.png")
 	ventana.blit(imagenFondoBot,(750,0))
 	#Interfaz
+<<<<<<< HEAD
 	fichaTurno = Ficha(2,880,440)
 	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 	marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
+=======
+	fichaTurno = Ficha(2,880,440) #Ficha de turno
+	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect()) #dibujo la ficha de turno
+	marcador(ventana,tablero) #Coloca el marcador
+>>>>>>> origin/master
 
 	while True:
 		#cursor.mover()
@@ -125,9 +137,7 @@ def damas():
 										seleccionado = False
 									#la ficha es seleccionada solo si puede moverse
 									elif tablero.comprobar_mov(j):
-										tablero.dibujar(ventana)
-										pygame.draw.circle(ventana, (255,117,020), j.get_rect().center, 39)
-										tablero.dibujar_fichas(ventana)
+										seleccionar_ficha(ventana,tablero,j)
 										fichaSel = j
 										seleccionado = True
 								#Si se selecciono una casilla libre
@@ -144,23 +154,28 @@ def damas():
 											#verifica si la ficha aun puede seguir comiendo
 											if (tablero.comprobar_sig_com(fichaSel)) & (tipo_mov == 0):
 												#print j.get_jugador()
-												tablero.dibujar(ventana)
-												pygame.draw.circle(ventana, (255,117,020), fichaSel.get_rect().center, 39)
-												tablero.dibujar_fichas(ventana)
+												seleccionar_ficha(ventana,tablero,fichaSel)
 												bloqueo = True
+												#ventana de menu
 												ventana.blit(imagenFondoBot,(750,0))
-												marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
-												victoria(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
+												#Ficha de turno
+												ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
+												#Actualiza el marcador
+												marcador(ventana,tablero)
 											#Si la ficha ya no puede moverse mas
 											else:
 												fichaSel = None
 												seleccionado = False
+												#ventana de menu
 												ventana.blit(imagenFondoBot,(750,0))
+												#Cambia la imagen de turno
 												turno = cambiar_turno(turno,fichaTurno,ventana)
-												marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
-												victoria(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
+												#Actualiza el marcador
+												marcador(ventana,tablero)
 												tablero.convertir_dama()
 												tablero.dibujar_fichas(ventana)
+												#Determina si existe victoria
+												victoria(ventana,tablero)
 												bloqueo = False
 
 
