@@ -80,15 +80,10 @@ def damas():
 	imagenFondoBot = pygame.image.load("../Resources/FondoBotones.png")
 	ventana.blit(imagenFondoBot,(750,0))
 	#Interfaz
-<<<<<<< HEAD
-	fichaTurno = Ficha(2,880,440)
-	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
-	marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
-=======
+
 	fichaTurno = Ficha(2,880,440) #Ficha de turno
 	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect()) #dibujo la ficha de turno
 	marcador(ventana,tablero) #Coloca el marcador
->>>>>>> origin/master
 
 	while True:
 		#cursor.mover()
@@ -111,7 +106,7 @@ def damas():
 					turno = Ficha.BLANCA
 					fichaTurno.cambiar_imagen(2)
 					ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
-					marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
+					marcador(ventana,tablero)
 
 
 

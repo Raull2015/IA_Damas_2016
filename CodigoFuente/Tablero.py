@@ -80,54 +80,6 @@ class Tablero(pygame.sprite.Sprite):
 				ban = 0
 			ladoY += 75.12
 
-		"""	#para pruebas con fichas damas
-			ladoX = self.rect.x + 85.62
-			ladoY = self.rect.y + 11
-			ban = 0
-			for j in range(1):
-				if(ban == 0):
-					ladoX = self.rect.x + 85.62
-					for i in range(1,8,2):
-						self.cuadricula[j][i] = Ficha(self.fCD,ladoX,ladoY)
-						ladoX += 149.24
-					ban = 1
-				else:
-					ladoX = self.rect.x + 11
-					for i in range(0,8,2):
-						self.cuadricula[j][i] = Ficha(self.fCD,ladoX,ladoY)
-						ladoX += 149.24
-					ban = 0
-				ladoY += 75.12
-
-			for j in range(1,7):
-				if(ban == 0):
-					ladoX = self.rect.x + 85.62
-					for i in range(1,8,2):
-						self.cuadricula[j][i] = Ficha(self.fV,ladoX,ladoY)
-						ladoX += 149.24
-					ban = 1
-				else:
-					ladoX = self.rect.x + 11
-					for i in range(0,8,2):
-						self.cuadricula[j][i] = Ficha(self.fV,ladoX,ladoY)
-						ladoX += 149.24
-					ban = 0
-				ladoY += 75.12
-
-			for j in range(7,8):
-				if(ban == 0):
-					ladoX = self.rect.x + 85.62
-					for i in range(1,8,2):
-						self.cuadricula[j][i] = Ficha(self.fBD,ladoX,ladoY)
-						ladoX += 149.24
-					ban = 1
-				else:
-					ladoX = self.rect.x + 11
-					for i in range(0,8,2):
-						self.cuadricula[j][i] = Ficha(self.fBD,ladoX,ladoY)
-						ladoX += 149.24
-					ban = 0
-				ladoY += 75.12 """
 
 	def imprimir_fichas(self):
 		for i in self.cuadricula:
@@ -741,6 +693,7 @@ class Tablero(pygame.sprite.Sprite):
 				return True, 0 #Si se movio comiendo
 		else:
 			print "la ficha se movio normalmente"
+			self.regla_comer_obligado(ficha.get_color(),ficha)
 			return True, 1 #Si fue un movimiento normal
 
 	def convertir_dama(self):
@@ -778,3 +731,13 @@ class Tablero(pygame.sprite.Sprite):
 						cont += 1
 
 		return cont
+
+	def regla_comer_obligado(self, color,excluir):
+		j = 0
+		for i in range(8):
+			for j in range(8):
+				if (self.cuadricula[i][j] != 0) & (self.cuadricula[i][j] != excluir):
+					if self.cuadricula[i][j].get_color() == color:
+						if self.comprobar_sig_com(self.cuadricula[i][j]) == True:
+							self.cuadricula[i][j].cambiar_imagen(-1)
+							return
