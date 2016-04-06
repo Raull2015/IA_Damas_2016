@@ -1,7 +1,10 @@
 import pygame, sys
+import py2exe
 from pygame.locals import *
 from Tablero import *
 from Ficha import *
+#from Cursor import *
+#from Boton import *
 #variables globales
 #Turno
 turno = Ficha.BLANCA
@@ -45,6 +48,8 @@ def victoria(ventana, cafes,blancas):
 
 
 def damas():
+	#botonReiniciar = Boton(850,200)
+	#cursor = Cursor()
 	#asigna variables
 	print "Turno: Fichas Blancas"
 	turno = Ficha.BLANCA
@@ -72,15 +77,32 @@ def damas():
 	fichaTurno = Ficha(2,880,440)
 	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 	marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
-	victoria(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
 
 	while True:
+		#cursor.mover()
+		#botonReiniciar.seleccion(ventana,cursor)
 		#recoge los evenetos del juego
 		for evento in pygame.event.get():
 			#eventos
 			if evento.type == QUIT:
 				pygame.quit()
 				sys.exit()
+
+			elif evento.type == pygame.KEYDOWN:
+				tecla = pygame.key.get_pressed()
+				if tecla[K_r]:
+					print "Reincio"
+					tablero.llenar()
+					tablero.dibujar(ventana)
+					tablero.dibujar_fichas(ventana)
+					ventana.blit(imagenFondoBot,(750,0))
+					turno = Ficha.BLANCA
+					fichaTurno.cambiar_imagen(2)
+					ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
+					marcador(ventana,tablero.contador_fichas_cafes(),tablero.contador_fichas_blancas())
+
+
+
 
 			#Evento cuando se presiona el boton del mouse
 			if evento.type == pygame.MOUSEBUTTONUP:
