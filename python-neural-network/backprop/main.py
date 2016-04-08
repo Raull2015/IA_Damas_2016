@@ -7,24 +7,24 @@ from tools import Instance
 
 training_one = []
 
-def leerEntradas():
+def leerEntradas(entrada):
     entrada = ''
     auxSalida = []
     cont = 0
-    archivo = open("../../dataset.txt","r")
-    entrada = archivo.readline().split(' ')
+    #archivo = open("../../dataset.txt","r")
+    #entrada = archivo.readline().split(' ')
     for n in entrada:
         if cont < 64:
             auxSalida.append(n)
             cont += 1
     return auxSalida
 
-def leerSalidas():
+def leerSalidas(entrada):
     salida = ''
     auxEntrada = []
     cont = 0
-    archivo = open("../../dataset.txt","r")
-    entrada = archivo.readline().split(' ')
+    #archivo = open("../../dataset.txt","r")
+    #entrada = archivo.readline().split(' ')
 
     for n in entrada:
         if cont > 63:
@@ -33,13 +33,15 @@ def leerSalidas():
         cont += 1
     return auxEntrada
 
-entradas = leerEntradas() 
-salidas = leerSalidas()           
+          
         
 def obtener_datos():
     archivo = open("../../dataset.txt", "r")
     for linea in archivo.readlines():
-        training_one.append(Instance([entradas],[salidas]))
+      entrada = linea.split(' ')
+      entradas = leerEntradas(entrada) 
+      salidas = leerSalidas(entrada) 
+      training_one.append(Instance([entradas],[salidas]))
 
 
 obtener_datos()
@@ -52,7 +54,7 @@ settings = {
     # Required settings
     "cost_function"         : sum_squared_error,
     "n_inputs"              : 64,       # Number of network input signals
-    "layers"                : [ (20, sigmoid_function), (10, sigmoid_function), (4, sigmoid_function) ]
+    "layers"                : [ (20, sigmoid_function), (10, sigmoid_function), (4, sigmoid_function) ],
                                         # [ (number_of_neurons, activation_function) ]
                                         # The last pair in you list describes the number of output signals
     
