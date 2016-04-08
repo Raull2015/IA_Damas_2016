@@ -10,6 +10,7 @@ class Tablero(pygame.sprite.Sprite):
 	fB = 2 # ficha blanca normal
 	fBD = 3 # ficha blanca dama
 
+
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
 		self.imagenTablero = pygame.image.load("../Resources/Tablero.png")
@@ -18,6 +19,7 @@ class Tablero(pygame.sprite.Sprite):
 		self.rect.y = 50
 		self.cuadricula = []
 		self.llenar()
+		self.entradas_ia = ''
 
 
 	def dibujar(self, superficie):
@@ -128,7 +130,7 @@ class Tablero(pygame.sprite.Sprite):
 				else:
 					if (self.cuadricula[i+1][j+1].get_color() == Ficha.LIBRE) | (self.cuadricula[i+1][j-1].get_color() == Ficha.LIBRE):
 						return True
-		#si la ficha es una ficha blanca normal o dama
+		#si la ficha es una ficha blanca normal 
 		elif ficha.get_jugador() == self.fB:
 			if i != 0:
 				# si la ficha esta en el borde derecho
@@ -143,6 +145,7 @@ class Tablero(pygame.sprite.Sprite):
 				else:
 					if (self.cuadricula[i-1][j+1].get_color() == Ficha.LIBRE) | (self.cuadricula[i-1][j-1].get_color() == Ficha.LIBRE):
 						return True
+		#si la ficha es una dama blanca o cafe
 		elif (ficha.get_jugador() == self.fCD) | (ficha.get_jugador() == self.fBD):
 			puede_moverse = False
 			y = j + 1
@@ -372,6 +375,158 @@ class Tablero(pygame.sprite.Sprite):
 
 		return False
 
+	def comprobar_espacio(self, ficha):
+		i,j = self.encontrar_ficha(ficha)
+		if i != 0:
+			# si la ficha esta en el borde derecho
+			if j == 7:
+				if self.cuadricula[i-1][j-1].get_color() == Ficha.CAFE:
+					return True
+			# si la ficha esta en el borde izquierdo
+			elif j == 0:
+				if self.cuadricula[i-1][j+1].get_color() == Ficha.CAFE :
+					return True
+			# si la ficha esta en cualquier posicion central
+			else:
+				if (self.cuadricula[i-1][j+1].get_color() == Ficha.CAFE) | (self.cuadricula[i-1][j-1].get_color() == Ficha.CAFE):
+					return True
+
+		puede_moverse = False
+		#esquina superior derecha
+		y = j + 1
+		for x in range(i-1,-1,-1):			
+			if y < 8:
+				if self.cuadricula[x][y].get_jugador() == self.fCD:
+					puede_moverse = True
+					break
+				if self.cuadricula[x][y].get_color() != Ficha.LIBRE:
+					break
+			y += 1
+		#esquina superior izquierda
+		y = j - 1
+		for x in range(i-1,-1,-1):
+			if y > -1:
+				if  self.cuadricula[x][y].get_jugador() == self.fCD:
+					puede_moverse = True
+					break
+				if self.cuadricula[x][y].get_color() != Ficha.LIBRE:
+					break
+			y += -1
+		#esquina inferior derecha
+		y = j + 1
+		for x in range(i+1,8):
+			if y < 8:
+				if  self.cuadricula[x][y].get_jugador() == self.fCD:
+					puede_moverse = True
+					break
+				if self.cuadricula[x][y].get_color() != Ficha.LIBRE:
+					break
+			y += 1
+		#esquina inferior izquierda
+		y = j - 1
+		for x in range(i+1,8):
+			if y > -1:
+				if  self.cuadricula[x][y].get_jugador() == self.fCD:
+					puede_moverse = True
+					break
+				if self.cuadricula[x][y].get_color() != Ficha.LIBRE:
+					break
+			y += -1
+
+		if puede_moverse:
+			return True
+
+		#si al espacio se puede llegar comiendo
+		if i > 1:
+			if(j == 7):
+
+				if self.cuadricula[i-1][j-1].get_color() == Ficha.BLANCA :
+					if self.cuadricula[i-2][j-2].get_color() == Ficha.CAFE:
+						return True
+
+			elif(j == 0):
+
+				if self.cuadricula[i-1][j+1].get_color() == Ficha.BLANCA:
+					if self.cuadricula[i-2][j+2].get_color() == Ficha.CAFE:
+						return True
+
+			else:
+				ladoD = False
+				ladoI = False
+				if self.cuadricula[i-1][j-1].get_color() == Ficha.BLANCA  :
+					if(j > 1):
+						if self.cuadricula[i-2][j-2].get_color() == Ficha.CAFE:
+							ladoD = True
+
+				if self.cuadricula[i-1][j+1].get_color() == Ficha.BLANCA  :
+					if(j < 6):
+						if self.cuadricula[i-2][j+2].get_color() == Ficha.CAFE:
+							ladoI = True
+				if ladoD | ladoI :
+					return True
+
+		#si puede llegar una dama comiendo
+		puede_comer = False
+		y = j + 1
+		for x in range(i-1,-1,-1):
+			if y < 7:
+				if self.cuadricula[x][y].get_color() == Ficha.BLANCA:
+					y += 1
+					for q in range(x-1,-1,-1):
+						if y < 7:
+							if self.cuadricula[q][y].get_jugador() == self.fCD:
+								return True
+							elif self.cuadricula[q][y].get_color() != Ficha.LIBRE:
+								break
+						y += 1
+				break
+
+		y = j - 1
+		for x in range(i-1,-1,-1):
+			if y > 0:
+				if self.cuadricula[x][y].get_color() == Ficha.BLANCA:
+					y += -1
+					for q in range(x-1,-1,-1):
+						if y > 0:
+							if self.cuadricula[q][y].get_jugador() == self.fCD:
+								return True
+							elif self.cuadricula[q][y].get_color() != Ficha.LIBRE:
+								break
+						y += -1
+				break
+
+		y = j + 1
+		for x in range(i+1,8):
+			if y < 7:
+				if self.cuadricula[x][y].get_color() == Ficha.BLANCA:
+					y += 1
+					for q in range(x+1,8):
+						if y < 7:
+							if self.cuadricula[q][y].get_jugador() == self.fCD:
+								return True
+							elif self.cuadricula[q][y].get_color() != Ficha.LIBRE:
+								break
+						y += 1
+				break
+
+		y = j - 1
+		for x in range(i+1,8):
+			if y > 0:
+				if self.cuadricula[x][y].get_color() == Ficha.BLANCA:
+					y += -1
+					for q in range(x+1,8):
+						if y > 0:
+							if self.cuadricula[q][y].get_jugador() == self.fCD:
+								return True
+							elif self.cuadricula[q][y].get_color() != Ficha.LIBRE:
+								break
+						y += -1
+				break
+
+		return False
+
+
+
 	def mover_espacio(self, ficha, lugar):
 			#Funcion que mueve la ficha seleccionada al lugar seleccionado
 			#Si es una ficha blanca normal
@@ -381,6 +536,8 @@ class Tablero(pygame.sprite.Sprite):
 					x, y = self.encontrar_ficha(lugar)
 					i, j = self.encontrar_ficha(ficha)
 					if ((i - x) == 1) & (((j - y) == 1) | ((j - y) == -1)):
+						#Regla
+						self.regla_comer_obligado(ficha.get_color())
 						posX = ficha.get_rect().x
 						posY = ficha.get_rect().y
 						ficha.set_rect(lugar.get_rect().x,lugar.get_rect().y )
@@ -397,6 +554,8 @@ class Tablero(pygame.sprite.Sprite):
 					x, y = self.encontrar_ficha(lugar)
 					i, j = self.encontrar_ficha(ficha)
 					if ((i - x) == -1) & (((j - y) == 1) | ((j - y) == -1)):
+						#Regla
+						self.regla_comer_obligado(ficha.get_color())
 						posX = ficha.get_rect().x
 						posY = ficha.get_rect().y
 						ficha.set_rect(lugar.get_rect().x,lugar.get_rect().y )
@@ -442,6 +601,8 @@ class Tablero(pygame.sprite.Sprite):
 										puede_moverse = False
 
 						if puede_moverse:
+							#Regla
+							self.regla_comer_obligado(ficha.get_color())
 							posX = ficha.get_rect().x
 							posY = ficha.get_rect().y
 							ficha.set_rect(lugar.get_rect().x,lugar.get_rect().y )
@@ -682,6 +843,11 @@ class Tablero(pygame.sprite.Sprite):
 			return False
 
 	def mover(self, ficha, lugar):
+		if ficha.get_color() == Ficha.CAFE:
+			i,j = self.encontrar_ficha(ficha)
+			x,y = self.encontrar_ficha(lugar)
+			
+
 		mov_normal = self.mover_espacio(ficha, lugar)
 		if mov_normal == False:
 			mov_comiendo = self.mover_comiendo(ficha, lugar)
@@ -690,10 +856,17 @@ class Tablero(pygame.sprite.Sprite):
 				return False, -1 #Si no se movio
 			else:
 				print "la ficha se movio comiendo"
+				if ficha.get_color() == Ficha.CAFE:
+					self.entradas_ia += str(self.normalizar(i)) + ' ' + str(self.normalizar(j)) + ' ' + str(self.normalizar(x)) + ' ' + str(self.normalizar(y))
+					
+				if ficha.es_dama() == False:
+					self.regla_dama_come_antes(ficha.get_color())
 				return True, 0 #Si se movio comiendo
 		else:
 			print "la ficha se movio normalmente"
-			self.regla_comer_obligado(ficha.get_color(),ficha)
+
+			if ficha.get_color() == Ficha.CAFE:
+				self.entradas_ia += str(self.normalizar(i)) + ' ' + str(self.normalizar(j)) + ' ' + str(self.normalizar(x)) + ' ' + str(self.normalizar(y))
 			return True, 1 #Si fue un movimiento normal
 
 	def convertir_dama(self):
@@ -732,12 +905,82 @@ class Tablero(pygame.sprite.Sprite):
 
 		return cont
 
-	def regla_comer_obligado(self, color,excluir):
-		j = 0
+	def regla_comer_obligado(self, color):
 		for i in range(8):
 			for j in range(8):
-				if (self.cuadricula[i][j] != 0) & (self.cuadricula[i][j] != excluir):
+				if self.cuadricula[i][j] != 0:
 					if self.cuadricula[i][j].get_color() == color:
 						if self.comprobar_sig_com(self.cuadricula[i][j]) == True:
 							self.cuadricula[i][j].cambiar_imagen(-1)
-							return
+							return True
+		return False
+
+	def regla_dama_come_antes(self, color):
+		for i in range(8):
+			for j in range(8):
+				if self.cuadricula[i][j] != 0:
+					if (self.cuadricula[i][j].get_color() == color) & (self.cuadricula[i][j].es_dama()):
+						if self.comprobar_sig_com(self.cuadricula[i][j]) == True:
+							self.cuadricula[i][j].cambiar_imagen(-1)
+							return True
+		return False
+
+	def entradas_rna(self):
+		entrada = ''
+		for i in range(8):
+			for j in range(8):
+				if self.cuadricula[i][j] != 0:
+					if self.cuadricula[i][j].get_color() == Ficha.CAFE:
+						entrada += str(self.cuadricula[i][j].get_jugador()) + " "
+						if self.comprobar_mov(self.cuadricula[i][j]):
+							entrada += '1 '
+						else:
+							entrada += '0 '
+					elif self.cuadricula[i][j].get_color() == Ficha.LIBRE:
+						entrada += str(self.cuadricula[i][j].get_jugador()) + " "
+						if self.comprobar_espacio(self.cuadricula[i][j]):
+							entrada += '1 '
+						else:
+							entrada += '0 '
+					
+					elif self.cuadricula[i][j].get_color() == Ficha.BLANCA:
+						entrada += str(self.cuadricula[i][j].get_jugador()) + " 0 "
+
+		self.entradas_ia = entrada
+		print entrada
+
+	def salida_rna(self):
+		outfile = open('dataset.txt', 'a') # Indicamos el valor 'w'.
+		outfile.write( self.entradas_ia + '\n')
+		outfile.close()
+
+
+	def comprobar_ganador(self, color):
+		for i in range(8):
+			for j in range(8):
+				if self.cuadricula[i][j] != 0:
+					if self.cuadricula[i][j].get_color() == color:
+						if self.comprobar_mov(self.cuadricula[i][j]):
+							return False
+		return True
+
+	def normalizar(self, valor):
+		if valor == 0:
+			return 0.062
+		elif valor == 1:
+			return 0.187
+		elif valor == 2:
+			return 0.312
+		elif valor == 3:
+			return 0.437
+		elif valor == 4:
+			return 0.562
+		elif valor == 5:
+			return 0.687
+		elif valor == 6:
+			return 0.812
+		elif valor == 7:
+			return 0.937
+
+
+

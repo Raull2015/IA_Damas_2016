@@ -17,16 +17,18 @@ bloqueo = False
 ancho = 1080
 alto = 700
 
-def cambiar_turno(turno,fichaTurno,ventana):
+def cambiar_turno(turno,fichaTurno,ventana,tablero):
 	if turno == Ficha.BLANCA:
 		fichaTurno.cambiar_imagen(0)
 		ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 		print "Turno: Fichas Cafes"
+		tablero.entradas_rna()
 		return Ficha.CAFE
 	else:
 		fichaTurno.cambiar_imagen(2)
 		ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 		print "Turno: Fichas Blancas"
+		tablero.salida_rna()
 		return Ficha.BLANCA
 
 def marcador(ventana,tablero):
@@ -41,10 +43,12 @@ def marcador(ventana,tablero):
 def victoria(ventana, tablero):
 	cafes = tablero.contador_fichas_cafes()
 	blancas = tablero.contador_fichas_blancas()
-	if cafes == 0:
+	cafes_mov = tablero.comprobar_ganador(Ficha.CAFE)
+	blancas_mov = tablero.comprobar_ganador(Ficha.BLANCA)
+	if (cafes == 0) | (cafes_mov):
 		victoriaBlanca = pygame.image.load("../Resources/vBlanca.png")
 		ventana.blit(victoriaBlanca,(71,304))
-	elif blancas == 0:
+	elif (blancas == 0) | (blancas_mov):
 		victoriaCafe = pygame.image.load("../Resources/vCafe.png")
 		ventana.blit(victoriaCafe,(71,304))
 
@@ -85,6 +89,8 @@ def damas():
 	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect()) #dibujo la ficha de turno
 	marcador(ventana,tablero) #Coloca el marcador
 
+	tablero.entradas_rna()
+
 	while True:
 		#cursor.mover()
 		#botonReiniciar.seleccion(ventana,cursor)
@@ -122,6 +128,8 @@ def damas():
 						if j != 0:
 							if j.get_rect().collidepoint(posX, posY):
 								print "Ficha de tipo: ", j.get_jugador()
+								if j.get_color() == Ficha.LIBRE:
+									print tablero.comprobar_espacio(j)
 								#Si selecciona una ficha del color que es el turno
 								if (j.get_color() == turno) & (bloqueo == False):
 									#si la ficha ya estaba seleccionada se deselecciona
@@ -164,7 +172,7 @@ def damas():
 												#ventana de menu
 												ventana.blit(imagenFondoBot,(750,0))
 												#Cambia la imagen de turno
-												turno = cambiar_turno(turno,fichaTurno,ventana)
+												turno = cambiar_turno(turno,fichaTurno,ventana,tablero)
 												#Actualiza el marcador
 												marcador(ventana,tablero)
 												tablero.convertir_dama()

@@ -5,3 +5,7 @@ Python necesita tener instalado el modulo
 Sobre el Juego:
 
    Para reiniciar se utiliza la tecla R
+
+Para el entrenamiento:
+	
+	Necesita que se ejecute el archivo main.py; ubicado en: python-neural-network/backprop

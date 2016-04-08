@@ -43,6 +43,12 @@ class Ficha(pygame.sprite.Sprite):
 			return self.BLANCA
 		else:
 			return self.LIBRE
+	
+	def es_dama(self):
+		if (self.jugador == 1) | (self.jugador == 3):
+			return True
+		else:
+			return False  
 
 	def cambiar_imagen(self, tipo):
 		if(tipo == 0):
@@ -102,8 +108,4 @@ class Ficha(pygame.sprite.Sprite):
 		self.rect.x = x
 		self.rect.y = y
 
-	def set_tipo(self,tipo):
-		self.tipo = tipo
 
-	def get_tipo(self):
-		return self.tipo
