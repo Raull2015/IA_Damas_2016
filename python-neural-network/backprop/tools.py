@@ -16,7 +16,7 @@ def dropout( X, p = 0. ):
         X = X * np.random.binomial(1,retain_p,size = X.shape)
         X /= retain_p
     return X
-#end  
+#end
 
 
 def add_bias(A):

@@ -1,21 +1,22 @@
 import pygame, sys
-import py2exe
 from pygame.locals import *
 from Tablero import *
 from Ficha import *
-#from Cursor import *
-#from Boton import *
 #variables globales
-#Turno
-turno = Ficha.BLANCA
-#Seleccion
-seleccionado = False
-fichaSel = None
-#Bloqueo de movimiento
-bloqueo = False
+
 #tamanio de ventana
 ancho = 1080
 alto = 700
+#modo de juego
+un_jugador = 0
+dos_jugadores = 1
+#Seleccion
+seleccionado = False
+fichaSel = None
+#Turno
+turno = Ficha.BLANCA
+#Bloqueo de movimiento
+bloqueo = False
 
 def cambiar_turno(turno,fichaTurno,ventana,tablero):
 	if turno == Ficha.BLANCA:
@@ -57,22 +58,22 @@ def seleccionar_ficha(ventana, tablero, fichaSel):
 	pygame.draw.circle(ventana, (255,117,020), fichaSel.get_rect().center, 39)
 	tablero.dibujar_fichas(ventana)
 
+def movimiento_ia(ventana,fichaTurno):
+	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
+
 def damas():
-	#botonReiniciar = Boton(850,200)
-	#cursor = Cursor()
 	#asigna variables
-	print "Turno: Fichas Blancas"
 	turno = Ficha.BLANCA
 	seleccionado = False
 	fichaSel = None
 	bloqueo = False
-	#Coloca el icono del juego
-	icon = pygame.image.load("../Resources/Icono.png")
-	pygame.display.set_icon(icon)
 	#crea la ventana de juego
 	pygame.init()
 	ventana = pygame.display.set_mode((ancho,alto))
 	pygame.display.set_caption("Damas")
+	#Coloca el icono del juego
+	icon = pygame.image.load("../Resources/Icono.png")
+	pygame.display.set_icon(icon)
 	#carga imagen de fono
 	imagenFondo = pygame.image.load("../Resources/Fondo.jpg")
 	ventana.blit(imagenFondo,(0,0))
@@ -80,20 +81,20 @@ def damas():
 	tablero = Tablero()
 	tablero.dibujar(ventana)
 	tablero.dibujar_fichas(ventana)
-	#Lineas
+	#Botones y HUD
 	imagenFondoBot = pygame.image.load("../Resources/FondoBotones.png")
 	ventana.blit(imagenFondoBot,(750,0))
 	#Interfaz
-
 	fichaTurno = Ficha(2,880,440) #Ficha de turno
 	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect()) #dibujo la ficha de turno
 	marcador(ventana,tablero) #Coloca el marcador
-
+	#establece el modo de juego
+	modo = un_jugador
+	#empieza a registrar los movimientos
 	tablero.entradas_rna()
 
+	print "Turno: Fichas Blancas"
 	while True:
-		#cursor.mover()
-		#botonReiniciar.seleccion(ventana,cursor)
 		#recoge los evenetos del juego
 		for evento in pygame.event.get():
 			#eventos
@@ -113,9 +114,6 @@ def damas():
 					fichaTurno.cambiar_imagen(2)
 					ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 					marcador(ventana,tablero)
-
-
-
 
 			#Evento cuando se presiona el boton del mouse
 			if evento.type == pygame.MOUSEBUTTONUP:
@@ -171,8 +169,6 @@ def damas():
 												seleccionado = False
 												#ventana de menu
 												ventana.blit(imagenFondoBot,(750,0))
-												#Cambia la imagen de turno
-												turno = cambiar_turno(turno,fichaTurno,ventana,tablero)
 												#Actualiza el marcador
 												marcador(ventana,tablero)
 												tablero.convertir_dama()
@@ -180,10 +176,11 @@ def damas():
 												#Determina si existe victoria
 												victoria(ventana,tablero)
 												bloqueo = False
-
-
+												if modo == dos_jugadores:
+													#Cambia la imagen de turno
+													turno = cambiar_turno(turno,fichaTurno,ventana,tablero)
+												elif modo == un_jugador:
+													movimiento_ia(ventana,fichaTurno)
 
 		pygame.display.update()
-
-
 damas()

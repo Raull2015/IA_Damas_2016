@@ -130,7 +130,7 @@ class Tablero(pygame.sprite.Sprite):
 				else:
 					if (self.cuadricula[i+1][j+1].get_color() == Ficha.LIBRE) | (self.cuadricula[i+1][j-1].get_color() == Ficha.LIBRE):
 						return True
-		#si la ficha es una ficha blanca normal 
+		#si la ficha es una ficha blanca normal
 		elif ficha.get_jugador() == self.fB:
 			if i != 0:
 				# si la ficha esta en el borde derecho
@@ -394,7 +394,7 @@ class Tablero(pygame.sprite.Sprite):
 		puede_moverse = False
 		#esquina superior derecha
 		y = j + 1
-		for x in range(i-1,-1,-1):			
+		for x in range(i-1,-1,-1):
 			if y < 8:
 				if self.cuadricula[x][y].get_jugador() == self.fCD:
 					puede_moverse = True
@@ -846,7 +846,7 @@ class Tablero(pygame.sprite.Sprite):
 		if ficha.get_color() == Ficha.CAFE:
 			i,j = self.encontrar_ficha(ficha)
 			x,y = self.encontrar_ficha(lugar)
-			
+
 
 		mov_normal = self.mover_espacio(ficha, lugar)
 		if mov_normal == False:
@@ -858,7 +858,7 @@ class Tablero(pygame.sprite.Sprite):
 				print "la ficha se movio comiendo"
 				if ficha.get_color() == Ficha.CAFE:
 					self.entradas_ia += str(self.normalizar(i)) + ' ' + str(self.normalizar(j)) + ' ' + str(self.normalizar(x)) + ' ' + str(self.normalizar(y))
-					
+
 				if ficha.es_dama() == False:
 					self.regla_dama_come_antes(ficha.get_color())
 				return True, 0 #Si se movio comiendo
@@ -942,15 +942,15 @@ class Tablero(pygame.sprite.Sprite):
 							entrada += '1 '
 						else:
 							entrada += '0 '
-					
+
 					elif self.cuadricula[i][j].get_color() == Ficha.BLANCA:
 						entrada += str(self.cuadricula[i][j].get_jugador()) + " 0 "
 
 		self.entradas_ia = entrada
-		print entrada
+
 
 	def salida_rna(self):
-		outfile = open('dataset.txt', 'a') # Indicamos el valor 'w'.
+		outfile = open('dataset.txt', 'a')
 		outfile.write( self.entradas_ia + '\n')
 		outfile.close()
 
@@ -981,6 +981,3 @@ class Tablero(pygame.sprite.Sprite):
 			return 0.812
 		elif valor == 7:
 			return 0.937
-
-
-
