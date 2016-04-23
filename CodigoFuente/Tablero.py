@@ -950,7 +950,7 @@ class Tablero(pygame.sprite.Sprite):
 
 
 	def salida_rna(self):
-		outfile = open('dataset.txt', 'a')
+		outfile = open('../DatosEntrenamiento/dataset.txt', 'a')
 		outfile.write( self.entradas_ia + '\n')
 		outfile.close()
 

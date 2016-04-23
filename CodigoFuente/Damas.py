@@ -18,18 +18,20 @@ turno = Ficha.BLANCA
 #Bloqueo de movimiento
 bloqueo = False
 
-def cambiar_turno(turno,fichaTurno,ventana,tablero):
+def cambiar_turno(turno,fichaTurno,ventana,tablero,grabar):
 	if turno == Ficha.BLANCA:
 		fichaTurno.cambiar_imagen(0)
 		ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 		print "Turno: Fichas Cafes"
-		tablero.entradas_rna()
+		if grabar:
+			tablero.entradas_rna()
 		return Ficha.CAFE
 	else:
 		fichaTurno.cambiar_imagen(2)
 		ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 		print "Turno: Fichas Blancas"
-		tablero.salida_rna()
+		if grabar:
+			tablero.salida_rna()
 		return Ficha.BLANCA
 
 def marcador(ventana,tablero):
@@ -89,7 +91,9 @@ def damas():
 	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect()) #dibujo la ficha de turno
 	marcador(ventana,tablero) #Coloca el marcador
 	#establece el modo de juego
-	modo = un_jugador
+	modo = dos_jugadores
+	#establece si registra los entrenamientos
+	grabar = True
 	#empieza a registrar los movimientos
 	tablero.entradas_rna()
 
@@ -114,6 +118,19 @@ def damas():
 					fichaTurno.cambiar_imagen(2)
 					ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 					marcador(ventana,tablero)
+				elif tecla[K_1]:
+					print "Cambiado a modo: Un Jugador"
+					modo = un_jugador
+				elif tecla[K_2]:
+					print "Cambiado a modo: Dos Jugadores"
+					modo = dos_jugadores
+				elif tecla[K_g]:
+					if grabar == True:
+						grabar = False
+						print "Salidas de Entrenamiento: Apagadas"
+					else :
+						grabar = True
+						print "Salidas de Entrenamiento: Encendidas"
 
 			#Evento cuando se presiona el boton del mouse
 			if evento.type == pygame.MOUSEBUTTONUP:
@@ -163,6 +180,10 @@ def damas():
 												ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 												#Actualiza el marcador
 												marcador(ventana,tablero)
+												#Salidas para entrenamiento
+												if grabar:
+													tablero.salida_rna()
+													tablero.entradas_rna()
 											#Si la ficha ya no puede moverse mas
 											else:
 												fichaSel = None
@@ -178,7 +199,7 @@ def damas():
 												bloqueo = False
 												if modo == dos_jugadores:
 													#Cambia la imagen de turno
-													turno = cambiar_turno(turno,fichaTurno,ventana,tablero)
+													turno = cambiar_turno(turno,fichaTurno,ventana,tablero,grabar)
 												elif modo == un_jugador:
 													movimiento_ia(ventana,fichaTurno)
 
