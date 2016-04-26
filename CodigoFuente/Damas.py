@@ -23,8 +23,7 @@ def cambiar_turno(turno,fichaTurno,ventana,tablero,grabar):
 		fichaTurno.cambiar_imagen(0)
 		ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 		print "Turno: Fichas Cafes"
-		if grabar:
-			tablero.entradas_rna()
+		tablero.entradas_rna()
 		return Ficha.CAFE
 	else:
 		fichaTurno.cambiar_imagen(2)
@@ -163,6 +162,8 @@ def damas():
 									if seleccionado == True:
 										if bloqueo == True:
 											ocurrio_mov = tablero.mover_comiendo(fichaSel,j)
+											if ocurrio_mov:
+												tablero.registrar_salida(fichaSel, j)
 										else:
 											ocurrio_mov, tipo_mov = tablero.mover(fichaSel, j)
 
@@ -183,7 +184,7 @@ def damas():
 												#Salidas para entrenamiento
 												if grabar:
 													tablero.salida_rna()
-													tablero.entradas_rna()
+												tablero.entradas_rna()
 											#Si la ficha ya no puede moverse mas
 											else:
 												fichaSel = None

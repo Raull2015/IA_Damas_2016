@@ -858,15 +858,17 @@ class Tablero(pygame.sprite.Sprite):
 				print "la ficha se movio comiendo"
 				if ficha.get_color() == Ficha.CAFE:
 					self.entradas_ia += str(self.normalizar(i)) + ' ' + str(self.normalizar(j)) + ' ' + str(self.normalizar(x)) + ' ' + str(self.normalizar(y))
-
+					print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y) 
 				if ficha.es_dama() == False:
 					self.regla_dama_come_antes(ficha.get_color())
 				return True, 0 #Si se movio comiendo
 		else:
 			print "la ficha se movio normalmente"
 
+
 			if ficha.get_color() == Ficha.CAFE:
 				self.entradas_ia += str(self.normalizar(i)) + ' ' + str(self.normalizar(j)) + ' ' + str(self.normalizar(x)) + ' ' + str(self.normalizar(y))
+				print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y) 
 			return True, 1 #Si fue un movimiento normal
 
 	def convertir_dama(self):
@@ -927,21 +929,22 @@ class Tablero(pygame.sprite.Sprite):
 
 	def entradas_rna(self):
 		entrada = ''
+		self.entradas_ia = ''
 		for i in range(8):
 			for j in range(8):
 				if self.cuadricula[i][j] != 0:
 					if self.cuadricula[i][j].get_color() == Ficha.CAFE:
-						entrada += str(self.cuadricula[i][j].get_jugador()) + " "
+						entrada += str(self.cuadricula[i][j].get_jugador())
 						if self.comprobar_mov(self.cuadricula[i][j]):
-							entrada += '1 '
+							entrada += ' 1 '
 						else:
-							entrada += '0 '
+							entrada += ' 0 '
 					elif self.cuadricula[i][j].get_color() == Ficha.LIBRE:
-						entrada += str(self.cuadricula[i][j].get_jugador()) + " "
+						entrada += str(self.cuadricula[i][j].get_jugador())
 						if self.comprobar_espacio(self.cuadricula[i][j]):
-							entrada += '1 '
+							entrada += ' 1 '
 						else:
-							entrada += '0 '
+							entrada += ' 0 '
 
 					elif self.cuadricula[i][j].get_color() == Ficha.BLANCA:
 						entrada += str(self.cuadricula[i][j].get_jugador()) + " 0 "
@@ -953,6 +956,14 @@ class Tablero(pygame.sprite.Sprite):
 		outfile = open('../DatosEntrenamiento/dataset.txt', 'a')
 		outfile.write( self.entradas_ia + '\n')
 		outfile.close()
+
+	def registrar_salida(self,fichaSel,lugar):
+		if fichaSel.get_color() == Ficha.CAFE:
+			x,y = self.encontrar_ficha(fichaSel)
+			i,j = self.encontrar_ficha(lugar)
+
+			self.entradas_ia += str(self.normalizar(i)) + ' ' + str(self.normalizar(j)) + ' ' + str(self.normalizar(x)) + ' ' + str(self.normalizar(y))
+			print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y) 
 
 
 	def comprobar_ganador(self, color):
