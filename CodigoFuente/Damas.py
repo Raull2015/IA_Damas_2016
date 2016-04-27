@@ -1,7 +1,10 @@
 import pygame, sys
 from pygame.locals import *
-from Tablero import *
-from Ficha import *
+from Tablero import Tablero
+from Ficha import Ficha
+from Herramientas import *
+from ../python-neural-network/backprop/main import NeuralNet
+from ../python-neural-network/backprop/tools import Instance
 #variables globales
 
 #tamanio de ventana
@@ -17,6 +20,10 @@ fichaSel = None
 turno = Ficha.BLANCA
 #Bloqueo de movimiento
 bloqueo = False
+#Red neuronal
+network = NeuralNet.load_from_file("network0.pkl")
+#archivo de salida de entrenamientos
+archivo_data_set = '../DatosEntrenamiento/dataset.txt'
 
 def cambiar_turno(turno,fichaTurno,ventana,tablero,grabar):
 	if turno == Ficha.BLANCA:
@@ -30,7 +37,7 @@ def cambiar_turno(turno,fichaTurno,ventana,tablero,grabar):
 		ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 		print "Turno: Fichas Blancas"
 		if grabar:
-			tablero.salida_rna()
+			tablero.escribir_salida_rna(archivo_data_set,tablero.entradas_ia)
 		return Ficha.BLANCA
 
 def marcador(ventana,tablero):
@@ -191,7 +198,7 @@ def damas():
 												marcador(ventana,tablero)
 												#Salidas para entrenamiento
 												if grabar:
-													tablero.salida_rna()
+													tablero.escribir_salida_rna()
 												tablero.entradas_rna()
 											#Si la ficha ya no puede moverse mas
 											else:

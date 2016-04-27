@@ -2,6 +2,7 @@ import numpy as np
 import pygame, sys
 from pygame.locals import *
 from Ficha import *
+from Herramientas import normalizar
 class Tablero(pygame.sprite.Sprite):
 
 	fC = 0 # ficha cafe normal
@@ -952,10 +953,14 @@ class Tablero(pygame.sprite.Sprite):
 		self.entradas_ia = entrada
 
 
-	def salida_rna(self):
-		outfile = open('../DatosEntrenamiento/dataset.txt', 'a')
+	def escribir_salida_rna(self,archivo):
+		outfile = open(archivo, 'a')
 		outfile.write( self.entradas_ia + '\n')
 		outfile.close()
+
+	def get_entrada_rna(self):
+		self.entradas_rna()
+		return self.entradas_ia
 
 	def registrar_salida(self,fichaSel,lugar):
 		if fichaSel.get_color() == Ficha.CAFE:
@@ -977,39 +982,3 @@ class Tablero(pygame.sprite.Sprite):
 
 	def get_ficha(x,y):
 		return self.cuadricula[x][y]
-
-	def normalizar_sin_uso(self, valor):
-		if valor == 0:
-			return 0.062
-		elif valor == 1:
-			return 0.187
-		elif valor == 2:
-			return 0.312
-		elif valor == 3:
-			return 0.437
-		elif valor == 4:
-			return 0.562
-		elif valor == 5:
-			return 0.687
-		elif valor == 6:
-			return 0.812
-		elif valor == 7:
-			return 0.937
-
-	def normalizar(self, valor):
-		if valor == 0:
-			return '0 0 0'
-		elif valor == 1:
-			return '0 0 1'
-		elif valor == 2:
-			return '0 1 0'
-		elif valor == 3:
-			return '0 1 1'
-		elif valor == 4:
-			return '1 0 0'
-		elif valor == 5:
-			return '1 0 1'
-		elif valor == 6:
-			return '1 1 0'
-		elif valor == 7:
-			return '1 1 1'
