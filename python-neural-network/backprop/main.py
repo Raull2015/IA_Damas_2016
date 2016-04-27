@@ -50,7 +50,7 @@ settings = {
     # Required settings
     "cost_function"         : sum_squared_error,
     "n_inputs"              : 64,       # Number of network input signals
-    "layers"                : [ (40, sigmoid_function),(20, sigmoid_function), (10, sigmoid_function), (4, sigmoid_function) ],
+    "layers"                : [ (128, sigmoid_function),(64, sigmoid_function), (12, sigmoid_function)],
                                         # [ (number_of_neurons, activation_function) ]
                                         # The last pair in you list describes the number of output signals
 
@@ -65,20 +65,20 @@ settings = {
 
 
 # initialize the neural network
-network = NeuralNet( settings )
+#network = NeuralNet( settings )
 
 # load a stored network configuration
-# network = NeuralNet.load_from_file( "trained_configuration.pkl" )
+network = NeuralNet.load_from_file( "network0.pkl" )
 
 # Train the network using backpropagation
 backpropagation(
         network,
         training_one,          # specify the training set
-        ERROR_LIMIT     = 0.01, # define an acceptable error limit
+        ERROR_LIMIT     = 1.0, # define an acceptable error limit
         #max_iterations  = 100, # continues until the error limit is reach if this argument is skipped
 
         # optional parameters
-        learning_rate   = 0.02, # learning rate
+        learning_rate   = 0.41, # learning rate
         momentum_factor = 0.7, # momentum
          )
 

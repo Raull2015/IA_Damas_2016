@@ -857,7 +857,7 @@ class Tablero(pygame.sprite.Sprite):
 			else:
 				print "la ficha se movio comiendo"
 				if ficha.get_color() == Ficha.CAFE:
-					self.entradas_ia += str(self.normalizar(i)) + ' ' + str(self.normalizar(j)) + ' ' + str(self.normalizar(x)) + ' ' + str(self.normalizar(y))
+					self.entradas_ia += self.normalizar(i) + ' ' + self.normalizar(j) + ' ' + self.normalizar(x) + ' ' + self.normalizar(y)
 					print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y) 
 				if ficha.es_dama() == False:
 					self.regla_dama_come_antes(ficha.get_color())
@@ -867,7 +867,7 @@ class Tablero(pygame.sprite.Sprite):
 
 
 			if ficha.get_color() == Ficha.CAFE:
-				self.entradas_ia += str(self.normalizar(i)) + ' ' + str(self.normalizar(j)) + ' ' + str(self.normalizar(x)) + ' ' + str(self.normalizar(y))
+				self.entradas_ia += self.normalizar(i) + ' ' + self.normalizar(j) + ' ' + self.normalizar(x) + ' ' + self.normalizar(y)
 				print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y) 
 			return True, 1 #Si fue un movimiento normal
 
@@ -975,7 +975,7 @@ class Tablero(pygame.sprite.Sprite):
 							return False
 		return True
 
-	def normalizar(self, valor):
+	def normalizar_sin_uso(self, valor):
 		if valor == 0:
 			return 0.062
 		elif valor == 1:
@@ -992,3 +992,21 @@ class Tablero(pygame.sprite.Sprite):
 			return 0.812
 		elif valor == 7:
 			return 0.937
+
+	def normalizar(self, valor):
+		if valor == 0:
+			return '0 0 0'
+		elif valor == 1:
+			return '0 0 1'
+		elif valor == 2:
+			return '0 1 0'
+		elif valor == 3:
+			return '0 1 1'
+		elif valor == 4:
+			return '1 0 0'
+		elif valor == 5:
+			return '1 0 1'
+		elif valor == 6:
+			return '1 1 0'
+		elif valor == 7:
+			return '1 1 1'

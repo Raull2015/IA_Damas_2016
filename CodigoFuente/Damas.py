@@ -117,6 +117,8 @@ def damas():
 					fichaTurno.cambiar_imagen(2)
 					ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 					marcador(ventana,tablero)
+					tablero.entradas_rna()
+					
 				elif tecla[K_1]:
 					print "Cambiado a modo: Un Jugador"
 					modo = un_jugador
