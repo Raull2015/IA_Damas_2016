@@ -5,8 +5,8 @@ import numpy as np
 
 default_settings = {
     # Optional settings
-    "weights_low"           : -0.1,     # Lower bound on initial weight range
-    "weights_high"          : 0.1,      # Upper bound on initial weight range
+    "weights_low"           : -0.9,     # Lower bound on initial weight range
+    "weights_high"          : 0.9,      # Upper bound on initial weight range
     "save_trained_network"  : True,    # Whether to write the trained weights to disk
 
     "input_layer_dropout"   : 0.0,      # dropout fraction of the input layer
@@ -157,11 +157,19 @@ class NeuralNet:
         out                        = input_signals[-1]
         error                      = self.cost_function(out, test_targets )
 
-        print "[testing] Network error: %.4g" % error
+        print "[testing] Network error: " , error
         print "[testing] Network results:"
         print "[testing]   input\tresult\ttarget"
+
+        resultados = []
+        esperados = []
+
         for entry, result, target in zip(test_data, out, test_targets):
-            print "[testing]   %s\t%s\t%s" % tuple(map(str, [entry, result, target]))
+            #print "[testing]   %s\t%s\t%s" % tuple(map(str, [entry, result, target]))
+            resultados.append(result)
+            esperados.append(target)
+
+        return resultados, esperados
     #end
 
 

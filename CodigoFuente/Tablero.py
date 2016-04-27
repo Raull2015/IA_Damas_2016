@@ -858,7 +858,7 @@ class Tablero(pygame.sprite.Sprite):
 				print "la ficha se movio comiendo"
 				if ficha.get_color() == Ficha.CAFE:
 					self.entradas_ia += self.normalizar(i) + ' ' + self.normalizar(j) + ' ' + self.normalizar(x) + ' ' + self.normalizar(y)
-					print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y) 
+					print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y)
 				if ficha.es_dama() == False:
 					self.regla_dama_come_antes(ficha.get_color())
 				return True, 0 #Si se movio comiendo
@@ -868,7 +868,7 @@ class Tablero(pygame.sprite.Sprite):
 
 			if ficha.get_color() == Ficha.CAFE:
 				self.entradas_ia += self.normalizar(i) + ' ' + self.normalizar(j) + ' ' + self.normalizar(x) + ' ' + self.normalizar(y)
-				print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y) 
+				print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y)
 			return True, 1 #Si fue un movimiento normal
 
 	def convertir_dama(self):
@@ -963,7 +963,7 @@ class Tablero(pygame.sprite.Sprite):
 			i,j = self.encontrar_ficha(lugar)
 
 			self.entradas_ia += str(self.normalizar(i)) + ' ' + str(self.normalizar(j)) + ' ' + str(self.normalizar(x)) + ' ' + str(self.normalizar(y))
-			print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y) 
+			print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y)
 
 
 	def comprobar_ganador(self, color):
@@ -974,6 +974,9 @@ class Tablero(pygame.sprite.Sprite):
 						if self.comprobar_mov(self.cuadricula[i][j]):
 							return False
 		return True
+
+	def get_ficha(x,y):
+		return self.cuadricula[x][y]
 
 	def normalizar_sin_uso(self, valor):
 		if valor == 0:

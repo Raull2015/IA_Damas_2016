@@ -8,6 +8,27 @@ import numpy as np
 
 training_one = []
 
+def binario_ent(vector):
+    return vector[0] * 4 + vector[1] * 2 + vector[2] * 1
+
+def valor(num):
+    if num > 0.5:
+        return 1
+    else:
+        return 0
+
+def convertir(resultado):
+    res = []
+    for i in resultado:
+        res.append(valor(i))
+    print res
+    no1 = binario_ent(res[:3])
+    no2 = binario_ent(res[3:6])
+    no3 = binario_ent(res[6:9])
+    no4 = binario_ent(res[9:12])
+    return [no1,no2,no3,no4]
+
+
 def leerEntradas(entrada):
     auxSalida = []
     cont = 0
@@ -71,18 +92,28 @@ settings = {
 network = NeuralNet.load_from_file( "network0.pkl" )
 
 # Train the network using backpropagation
-backpropagation(
+"""backpropagation(
         network,
         training_one,          # specify the training set
-        ERROR_LIMIT     = 1.0, # define an acceptable error limit
-        #max_iterations  = 100, # continues until the error limit is reach if this argument is skipped
+        ERROR_LIMIT     = 0.1, # define an acceptable error limit
+        max_iterations  = 100000, # continues until the error limit is reach if this argument is skipped
 
         # optional parameters
-        learning_rate   = 0.41, # learning rate
+        learning_rate   = 0.5, # learning rate
         momentum_factor = 0.7, # momentum
-         )
+         )"""
 
-network.print_test( training_one )
+resultados, esperados = network.print_test( training_one )
+
+
+for resultado, esperado in zip(resultados,esperados):
+    print 'El resultado es '
+    print convertir(resultado)
+    print 'Lo esperado es'
+    print esperado
+    print convertir(esperado)
+
+
 
 # Train the network using SciPy
 """scipyoptimize(

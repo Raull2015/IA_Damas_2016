@@ -59,8 +59,14 @@ def seleccionar_ficha(ventana, tablero, fichaSel):
 	pygame.draw.circle(ventana, (255,117,020), fichaSel.get_rect().center, 39)
 	tablero.dibujar_fichas(ventana)
 
-def movimiento_ia(ventana,fichaTurno):
+def movimiento_ia(ventana,fichaTurno,tablero):
 	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
+	i,j = 0
+	x,y = 0
+	fichaSel = tablero.get_ficha(i,j)
+	lugar = tablero.get_ficha(x,y)
+	ocurrio_mov, tipo_mov = tablero.mover(fichaSel, lugar)
+
 
 def damas():
 	#asigna variables
@@ -118,7 +124,7 @@ def damas():
 					ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 					marcador(ventana,tablero)
 					tablero.entradas_rna()
-					
+
 				elif tecla[K_1]:
 					print "Cambiado a modo: Un Jugador"
 					modo = un_jugador
@@ -204,7 +210,8 @@ def damas():
 													#Cambia la imagen de turno
 													turno = cambiar_turno(turno,fichaTurno,ventana,tablero,grabar)
 												elif modo == un_jugador:
-													movimiento_ia(ventana,fichaTurno)
+													pass
+													#movimiento_ia(ventana,fichaTurno,tablero)
 
 		pygame.display.update()
 damas()
