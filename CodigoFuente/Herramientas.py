@@ -47,7 +47,7 @@ def obtener_datos():
       salidas = leerSalidas(entrada)
       training_one.append(Instance(entradas,salidas))
 
-def normalizar_sin_uso(self, valor):
+def normalizar_sin_uso( valor):
     if valor == 0:
         return 0.062
     elif valor == 1:
@@ -65,7 +65,7 @@ def normalizar_sin_uso(self, valor):
     elif valor == 7:
         return 0.937
 
-def normalizar(self, valor):
+def normalizar( valor):
     if valor == 0:
         return '0 0 0'
     elif valor == 1:

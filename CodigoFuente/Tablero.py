@@ -2,7 +2,7 @@ import numpy as np
 import pygame, sys
 from pygame.locals import *
 from Ficha import *
-from Herramientas import normalizar
+from Herramientas import *
 class Tablero(pygame.sprite.Sprite):
 
 	fC = 0 # ficha cafe normal
@@ -858,7 +858,7 @@ class Tablero(pygame.sprite.Sprite):
 			else:
 				print "la ficha se movio comiendo"
 				if ficha.get_color() == Ficha.CAFE:
-					self.entradas_ia += self.normalizar(i) + ' ' + self.normalizar(j) + ' ' + self.normalizar(x) + ' ' + self.normalizar(y)
+					self.entradas_ia += normalizar(i) + ' ' + normalizar(j) + ' ' + normalizar(x) + ' ' + normalizar(y)
 					print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y)
 				if ficha.es_dama() == False:
 					self.regla_dama_come_antes(ficha.get_color())
@@ -868,7 +868,7 @@ class Tablero(pygame.sprite.Sprite):
 
 
 			if ficha.get_color() == Ficha.CAFE:
-				self.entradas_ia += self.normalizar(i) + ' ' + self.normalizar(j) + ' ' + self.normalizar(x) + ' ' + self.normalizar(y)
+				self.entradas_ia += normalizar(i) + ' ' + normalizar(j) + ' ' + normalizar(x) + ' ' + normalizar(y)
 				print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y)
 			return True, 1 #Si fue un movimiento normal
 
@@ -960,14 +960,14 @@ class Tablero(pygame.sprite.Sprite):
 
 	def get_entrada_rna(self):
 		self.entradas_rna()
-		return self.entradas_ia
+		return self.entradas_ia.split(' ')
 
 	def registrar_salida(self,fichaSel,lugar):
 		if fichaSel.get_color() == Ficha.CAFE:
 			x,y = self.encontrar_ficha(fichaSel)
 			i,j = self.encontrar_ficha(lugar)
 
-			self.entradas_ia += str(self.normalizar(i)) + ' ' + str(self.normalizar(j)) + ' ' + str(self.normalizar(x)) + ' ' + str(self.normalizar(y))
+			self.entradas_ia += str(normalizar(i)) + ' ' + str(normalizar(j)) + ' ' + str(normalizar(x)) + ' ' + str(normalizar(y))
 			print "i:" +str(i)+ " j:"+str(j)+" x:"+str(x)+ " y:"+str(y)
 
 
@@ -980,5 +980,5 @@ class Tablero(pygame.sprite.Sprite):
 							return False
 		return True
 
-	def get_ficha(x,y):
+	def get_ficha(self,x,y):
 		return self.cuadricula[x][y]

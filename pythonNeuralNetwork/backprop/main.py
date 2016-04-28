@@ -92,16 +92,16 @@ settings = {
 network = NeuralNet.load_from_file( "network0.pkl" )
 
 # Train the network using backpropagation
-"""backpropagation(
+backpropagation(
         network,
         training_one,          # specify the training set
-        ERROR_LIMIT     = 0.1, # define an acceptable error limit
-        max_iterations  = 100000, # continues until the error limit is reach if this argument is skipped
+        ERROR_LIMIT     = 1.8, # define an acceptable error limit
+        max_iterations  = 4000, # continues until the error limit is reach if this argument is skipped
 
         # optional parameters
-        learning_rate   = 0.5, # learning rate
+        learning_rate   = 0.2, # learning rate
         momentum_factor = 0.7, # momentum
-         )"""
+         )
 
 resultados, esperados = network.print_test( training_one )
 

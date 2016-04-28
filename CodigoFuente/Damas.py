@@ -3,8 +3,9 @@ from pygame.locals import *
 from Tablero import Tablero
 from Ficha import Ficha
 from Herramientas import *
-from ../python-neural-network/backprop/main import NeuralNet
-from ../python-neural-network/backprop/tools import Instance
+sys.path.append('../pythonNeuralNetwork/backprop')
+from neuralnet import NeuralNet
+from tools import Instance
 #variables globales
 
 #tamanio de ventana
@@ -37,7 +38,7 @@ def cambiar_turno(turno,fichaTurno,ventana,tablero,grabar):
 		ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
 		print "Turno: Fichas Blancas"
 		if grabar:
-			tablero.escribir_salida_rna(archivo_data_set,tablero.entradas_ia)
+			tablero.escribir_salida_rna(archivo_data_set)
 		return Ficha.BLANCA
 
 def marcador(ventana,tablero):
@@ -68,11 +69,31 @@ def seleccionar_ficha(ventana, tablero, fichaSel):
 
 def movimiento_ia(ventana,fichaTurno,tablero):
 	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect())
-	i,j = 0
-	x,y = 0
+	vector = np.array(tablero.get_entrada_rna())
+	vector = vector[:64].astype(float)
+
+	entrada = [Instance(vector,[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.])]
+	salida, esperado = network.print_test(entrada)
+	for i in salida:
+		coordenadas = convertir(i)
+
+	i = coordenadas[0]
+	j = coordenadas[1]
+	x = coordenadas[2]
+	y = coordenadas[3]
+	print "ficha selec: ", i , ",",j, "destino: ", x,",",y
 	fichaSel = tablero.get_ficha(i,j)
 	lugar = tablero.get_ficha(x,y)
-	ocurrio_mov, tipo_mov = tablero.mover(fichaSel, lugar)
+	if  (fichaSel != 0) & (lugar != 0):
+		if fichaSel.get_color() == Ficha.CAFE:	
+			ocurrio_mov, tipo_mov = tablero.mover(fichaSel, lugar)
+			#actualiza el marcador y dibuja el tablero
+			marcador(ventana,tablero)
+			tablero.convertir_dama()
+			tablero.dibujar(ventana)
+			tablero.dibujar_fichas(ventana)
+			#Determina si existe victoria
+			victoria(ventana,tablero)
 
 
 def damas():
@@ -103,9 +124,9 @@ def damas():
 	ventana.blit(fichaTurno.get_imagen(), fichaTurno.get_rect()) #dibujo la ficha de turno
 	marcador(ventana,tablero) #Coloca el marcador
 	#establece el modo de juego
-	modo = dos_jugadores
+	modo = un_jugador
 	#establece si registra los entrenamientos
-	grabar = True
+	grabar = False
 	#empieza a registrar los movimientos
 	tablero.entradas_rna()
 
@@ -217,8 +238,7 @@ def damas():
 													#Cambia la imagen de turno
 													turno = cambiar_turno(turno,fichaTurno,ventana,tablero,grabar)
 												elif modo == un_jugador:
-													pass
-													#movimiento_ia(ventana,fichaTurno,tablero)
+													movimiento_ia(ventana,fichaTurno,tablero)
 
 		pygame.display.update()
 damas()
